@@ -3,9 +3,7 @@
 [license]: https://github.com/tcnksm/go-cf-manifest/blob/master/LICENSE
 [godocs]: http://godoc.org/github.com/tcnksm/go-cf-manifest
 
-`go-cf-manifest` is a Go package for parsing `manifest.yml`.
-
-The documentation is on [GoDoc][godocs].
+`go-cf-manifest` is a Go package for handling [CloudFoundry](https://www.cloudfoundry.org/) `manifest.yml`. The documentation is on [GoDoc][godocs].
 
 ## Install
 
