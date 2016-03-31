@@ -1,3 +1,10 @@
+/*
+go-cf-manifest is pacakge for handling CloudFoundry `manifest.yml` file.
+
+  m, _ := manifest.ParseFile("./manifest.yml")
+  fmt.Printf("%#v",m)
+
+*/
 package manifest
 
 import (
@@ -9,6 +16,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Parse parses manifest file given as io.Reader.
 func Parse(rd io.Reader) (*Manifest, error) {
 	var buf bytes.Buffer
 	if _, err := io.Copy(&buf, rd); err != nil {
@@ -23,6 +31,7 @@ func Parse(rd io.Reader) (*Manifest, error) {
 	return &manifest, nil
 }
 
+// ParseFile parses a manifest file.
 func ParseFile(path string) (*Manifest, error) {
 	path, err := filepath.Abs(path)
 	if err != nil {
