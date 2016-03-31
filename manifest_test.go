@@ -12,61 +12,28 @@ func TestParseFile(t *testing.T) {
 		Expect   *Manifest
 	}{
 		{
-			"base.yml",
+			"basic.yml",
 			&Manifest{
-				Name:      "sample",
-				Buildpack: "https://github.com/cloudfoundry/go-buildpack",
-				Command:   "bundle exec rake VERBOSE=true",
-				DiskQuota: "1024M",
-				Domain:    "sample.example.com",
-				Domains: []string{
-					"example1.com",
-					"example2.org",
-				},
-				Stack:     "cflinuxfs2",
+				Domain:    "shared-example.com",
 				Instances: 2,
-				Memory:    "128M",
-				Host:      "hello",
-				Hosts: []string{
-					"hello1",
-					"hello2",
-				},
-				NoHostName:  true,
-				RandomRoute: true,
-				Path:        "path/to/app",
-				Timeout:     80,
-				NoRoute:     true,
-				Env: map[string]string{
-					"RAILS_ENV": "production",
-					"RACK_ENV":  "production",
-				},
+				Memory:    "1G",
 				Services: []string{
-					"mysql",
-					"redis",
+					"rabbitmq",
 				},
-
-				Applications: []Application(nil),
-				Inherit:      "",
-			},
-		},
-
-		{
-			"applications.yml",
-			&Manifest{
 				Applications: []Application{
 					Application{
 						Name:      "sample",
 						Buildpack: "https://github.com/cloudfoundry/go-buildpack",
 						Command:   "bundle exec rake VERBOSE=true",
 						DiskQuota: "1024M",
-						Domain:    "sample.example.com",
+						Domain:    "example.com",
 						Domains: []string{
-							"example1.com",
+							"example1.io",
 							"example2.org",
 						},
 						Stack:     "cflinuxfs2",
-						Instances: 2,
-						Memory:    "128M",
+						Instances: 3,
+						Memory:    "512M",
 						Host:      "hello",
 						Hosts: []string{
 							"hello1",
