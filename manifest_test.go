@@ -12,7 +12,46 @@ func TestParseFile(t *testing.T) {
 		Expect   *Manifest
 	}{
 		{
-			"base-manifest.yml",
+			"base.yml",
+			&Manifest{
+				Name:      "sample",
+				Buildpack: "https://github.com/cloudfoundry/go-buildpack",
+				Command:   "bundle exec rake VERBOSE=true",
+				DiskQuota: "1024M",
+				Domain:    "sample.example.com",
+				Domains: []string{
+					"example1.com",
+					"example2.org",
+				},
+				Stack:     "cflinuxfs2",
+				Instances: 2,
+				Memory:    "128M",
+				Host:      "hello",
+				Hosts: []string{
+					"hello1",
+					"hello2",
+				},
+				NoHostName:  true,
+				RandomRoute: true,
+				Path:        "path/to/app",
+				Timeout:     80,
+				NoRoute:     true,
+				Env: map[string]string{
+					"RAILS_ENV": "production",
+					"RACK_ENV":  "production",
+				},
+				Services: []string{
+					"mysql",
+					"redis",
+				},
+
+				Applications: []Application(nil),
+				Inherit:      "",
+			},
+		},
+
+		{
+			"applications.yml",
 			&Manifest{
 				Applications: []Application{
 					Application{
@@ -53,7 +92,7 @@ func TestParseFile(t *testing.T) {
 		},
 
 		{
-			"empty-manifest.yml",
+			"empty.yml",
 			&Manifest{
 				Applications: []Application(nil),
 				Inherit:      "",
