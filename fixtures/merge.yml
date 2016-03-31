@@ -1,0 +1,14 @@
+---
+app_type:
+  app_a: &APP_A
+    memory: 256mb
+    instances: 1
+
+applications:
+- name: app1
+  <<: *APP_A
+- name: app2
+  <<: *APP_A
+- name: app3
+  <<: *APP_A
+  instances: 3

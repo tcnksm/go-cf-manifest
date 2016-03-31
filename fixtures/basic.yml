@@ -1,0 +1,34 @@
+---
+inherit: "inherited.yml"
+domain: shared-example.com
+instances: 2
+memory: 1G
+services:
+  - rabbitmq
+applications:
+- name: sample
+  buildpack: https://github.com/cloudfoundry/go-buildpack
+  command: bundle exec rake VERBOSE=true
+  disk_quota: 1024M
+  domain: example.com
+  domains:
+  - example1.io
+  - example2.org
+  stack: cflinuxfs2
+  instances: 3
+  memory: 512M  
+  host: hello
+  hosts:
+  - hello1
+  - hello2
+  no-hostname: true
+  random-route: true
+  path: path/to/app
+  timeout: 80
+  no-route: true
+  env:
+    RAILS_ENV: production
+    RACK_ENV: production
+  services:
+  - mysql
+  - redis

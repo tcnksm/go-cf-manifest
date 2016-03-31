@@ -54,15 +54,37 @@ func TestParseFile(t *testing.T) {
 						},
 					},
 				},
-				Inherit: "",
+				Inherit: "inherited.yml",
 			},
 		},
 
 		{
 			"empty.yml",
+			&Manifest{},
+		},
+
+		{
+			"merge.yml",
 			&Manifest{
-				Applications: []Application(nil),
-				Inherit:      "",
+				Applications: []Application{
+					{
+						Name:      "app1",
+						Instances: 1,
+						Memory:    "256mb",
+					},
+
+					{
+						Name:      "app2",
+						Instances: 1,
+						Memory:    "256mb",
+					},
+
+					{
+						Name:      "app3",
+						Instances: 3,
+						Memory:    "256mb",
+					},
+				},
 			},
 		},
 	}
