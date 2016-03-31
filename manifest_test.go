@@ -12,36 +12,57 @@ func TestParseFile(t *testing.T) {
 		Expect   *Manifest
 	}{
 		{
-			FileName: "base-manifest.yml",
-			Expect: &Manifest{
+			"base-manifest.yml",
+			&Manifest{
 				Applications: []Application{
 					Application{
-						Name:        "app-name",
-						Buildpack:   "",
-						Command:     "",
-						DiskQuota:   "",
-						Memory:      "128M",
-						Instances:   1,
-						Domain:      "app.example.com",
-						Domains:     []string(nil),
-						Host:        "hello",
-						Hosts:       []string(nil),
-						NoHostName:  false,
-						RandomRoute: false,
-						NoRoute:     false,
+						Name:      "sample",
+						Buildpack: "https://github.com/cloudfoundry/go-buildpack",
+						Command:   "bundle exec rake VERBOSE=true",
+						DiskQuota: "1024M",
+						Domain:    "sample.example.com",
+						Domains: []string{
+							"example1.com",
+							"example2.org",
+						},
+						Stack:     "cflinuxfs2",
+						Instances: 2,
+						Memory:    "128M",
+						Host:      "hello",
+						Hosts: []string{
+							"hello1",
+							"hello2",
+						},
+						NoHostName:  true,
+						RandomRoute: true,
 						Path:        "path/to/app",
-						Timeout:     0,
-						Stack:       "",
-						Env:         map[string]string(nil),
-						Services:    []string(nil),
+						Timeout:     80,
+						NoRoute:     true,
+						Env: map[string]string{
+							"RAILS_ENV": "production",
+							"RACK_ENV":  "production",
+						},
+						Services: []string{
+							"mysql",
+							"redis",
+						},
 					},
 				},
-				Inherit: ""},
+				Inherit: "",
+			},
+		},
+
+		{
+			"empty-manifest.yml",
+			&Manifest{
+				Applications: []Application(nil),
+				Inherit:      "",
+			},
 		},
 	}
 
 	for _, tc := range cases {
-		t.Logf("Test ParseFile: %s", tc.FileName)
+		t.Logf("TestParseFile: %s", tc.FileName)
 
 		path, err := filepath.Abs(filepath.Join("./fixtures", tc.FileName))
 		if err != nil {

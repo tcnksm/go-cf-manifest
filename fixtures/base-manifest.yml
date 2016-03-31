@@ -1,8 +1,28 @@
 ---
 applications:
-- name: app-name
-  memory: 128M
-  instances: 1
+- name: sample
+  buildpack: https://github.com/cloudfoundry/go-buildpack
+  command: bundle exec rake VERBOSE=true
+  disk_quota: 1024M
+  domain: sample.example.com
+  domains:
+  - example1.com
+  - example2.org
+  stack: cflinuxfs2
+  instances: 2
+  memory: 128M  
   host: hello
-  domain: app.example.com
+  hosts:
+  - hello1
+  - hello2
+  no-hostname: true
+  random-route: true
   path: path/to/app
+  timeout: 80
+  no-route: true
+  env:
+    RAILS_ENV: production
+    RACK_ENV: production
+  services:
+  - mysql
+  - redis
