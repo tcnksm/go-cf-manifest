@@ -20,8 +20,8 @@ func TestParseFile(t *testing.T) {
 				Services: []string{
 					"rabbitmq",
 				},
-				Applications: []Application{
-					Application{
+				Applications: []*Application{
+					{
 						Name:      "sample",
 						Buildpack: "https://github.com/cloudfoundry/go-buildpack",
 						Command:   "bundle exec rake VERBOSE=true",
@@ -66,7 +66,7 @@ func TestParseFile(t *testing.T) {
 		{
 			"merge.yml",
 			&Manifest{
-				Applications: []Application{
+				Applications: []*Application{
 					{
 						Name:      "app1",
 						Instances: 1,
