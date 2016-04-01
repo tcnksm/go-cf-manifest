@@ -7,6 +7,8 @@ import (
 
 // Manifest represent manifest file.
 // See more details on https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html
+//
+// (TODO:tcnksm) Reduce duplication
 type Manifest struct {
 	Name         string            `yaml:"name"`
 	Buildpack    string            `yaml:"buildpack"`
