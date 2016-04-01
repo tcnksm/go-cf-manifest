@@ -70,6 +70,7 @@ func TestManifest_Apply(t *testing.T) {
 			},
 		},
 
+		// Merge slice
 		{
 			&Manifest{
 				Services: []string{
@@ -113,6 +114,83 @@ func TestManifest_Apply(t *testing.T) {
 				},
 			},
 		},
+
+		// Merge slice with same val
+		{
+			&Manifest{
+				Services: []string{
+					"redis",
+				},
+				Applications: []*Application{
+					{
+						Name: "app1",
+						Services: []string{
+							"redis",
+							"rabbitmq",
+						},
+					},
+				},
+			},
+
+			&Manifest{
+				Services: []string{
+					"redis",
+				},
+				Applications: []*Application{
+					{
+						Name: "app1",
+						Services: []string{
+							"redis",
+							"rabbitmq",
+						},
+					},
+				},
+			},
+		},
+
+		// Merge map
+		{
+			&Manifest{
+				Env: map[string]string{
+					"RAILS_ENV": "test",
+					"LOG_LEVEL": "INFO",
+				},
+				Applications: []*Application{
+					{
+						Name: "app1",
+						Env: map[string]string{
+							"RAILS_ENV": "production",
+						},
+					},
+					{
+						Name: "app2",
+					},
+				},
+			},
+
+			&Manifest{
+				Env: map[string]string{
+					"RAILS_ENV": "test",
+					"LOG_LEVEL": "INFO",
+				},
+				Applications: []*Application{
+					{
+						Name: "app1",
+						Env: map[string]string{
+							"RAILS_ENV": "production",
+							"LOG_LEVEL": "INFO",
+						},
+					},
+					{
+						Name: "app2",
+						Env: map[string]string{
+							"RAILS_ENV": "test",
+							"LOG_LEVEL": "INFO",
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for _, tc := range cases {
@@ -122,7 +200,7 @@ func TestManifest_Apply(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(tc.Manifest, tc.Expect) {
-			t.Fatalf("expect %#v to be eq %#v", tc.Manifest.Applications[0], tc.Expect.Applications[0])
+			t.Fatalf("expect \n %#v\n to be eq\n %#v", tc.Manifest.Applications[0], tc.Expect.Applications[0])
 		}
 	}
 

@@ -57,13 +57,19 @@ type Application struct {
 //
 // Rule is that content in the applications block overrides
 // content above the applications block, if the two conflict.
+//
+// (TODO:tcnksm) Need more refactoring
 func (m *Manifest) Apply() error {
 
 	if len(m.Applications) == 0 {
 		return fmt.Errorf("no applications field found")
 	}
 
-	// Find the non-zero value from above the applications block
+	// Find the non-zero value from above the applications block.
+	// If the non-zero value is found, access that filed on applications
+	// block and set it if it's empty.
+	//
+	// If filed is slice or map then append value (TODO: Check it).
 	elem := reflect.ValueOf(m).Elem()
 	for i := 0; i < elem.NumField(); i++ {
 
@@ -76,12 +82,10 @@ func (m *Manifest) Apply() error {
 
 		val := elem.Field(i)
 		switch val.Kind() {
-		case reflect.Slice:
+		case reflect.Slice, reflect.Map:
 			if val.Len() == 0 {
 				continue
 			}
-		case reflect.Map:
-			continue
 		default:
 			zeroVal := reflect.Zero(val.Type())
 			if val.Interface() == zeroVal.Interface() {
@@ -120,8 +124,38 @@ func (m *Manifest) Apply() error {
 			}
 
 			if appField.Kind() == reflect.Slice {
-				res := reflect.AppendSlice(appField, val)
-				appField.Set(res)
+				c, _ := val.Interface().([]string)
+				a, _ := appField.Interface().([]string)
+				var targets []string
+				for _, v1 := range c {
+					f := false
+					for _, v2 := range a {
+						if v1 == v2 {
+							f = true
+						}
+					}
+
+					if !f {
+						targets = append(targets, v1)
+					}
+				}
+
+				a = append(a, targets...)
+				appField.Set(reflect.ValueOf(a))
+			}
+
+			if appField.Kind() == reflect.Map {
+				newMap := make(map[string]string)
+				c, _ := val.Interface().(map[string]string)
+				for k, v := range c {
+					newMap[k] = v
+				}
+
+				a, _ := appField.Interface().(map[string]string)
+				for k, v := range a {
+					newMap[k] = v
+				}
+				appField.Set(reflect.ValueOf(newMap))
 			}
 		}
 	}
@@ -135,5 +169,12 @@ func (m *Manifest) Apply() error {
 //
 // TODO
 func (m *Manifest) merge(other *Manifest) error {
+	return nil
+}
+
+// Validate validates manifest has requirement filed or not.
+//
+// TODO
+func (m *Manifest) validate() error {
 	return nil
 }
