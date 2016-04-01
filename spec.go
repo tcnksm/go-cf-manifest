@@ -7,8 +7,6 @@ import (
 
 // Manifest represent manifest file.
 // See more details on https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html
-//
-// (TODO:tcnksm) Reduce duplication
 type Manifest struct {
 	Name         string            `yaml:"name"`
 	Buildpack    string            `yaml:"buildpack"`
@@ -54,13 +52,10 @@ type Application struct {
 	Services    []string          `yaml:"services"`
 }
 
-// Apply applies above the application block (common configuration)
-// to applications block.
+// Apply applies common block to applications block.
 //
 // Rule is that content in the applications block overrides
 // content above the applications block, if the two conflict.
-//
-// (TODO:tcnksm) Need more refactoring
 func (m *Manifest) Apply() error {
 
 	if len(m.Applications) == 0 {
